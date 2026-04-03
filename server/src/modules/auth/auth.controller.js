@@ -26,7 +26,5 @@ export const registerUser = async (req, res) => {
     throw new ApiError(500, "Failed to create user");
   }
 
-  return res
-    .status(201)
-    .json(new apiResponse(201, createdUser, "User registered successfully"));
+  return createdUser;
 };
