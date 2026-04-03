@@ -1,14 +1,32 @@
-import { registerUser } from "./auth.service.js";
-import { ApiResponse } from "../../utils/apiResponse.js";
+import { User } from "../../models/user.model.js";
+import { ApiError } from "../../utils/apiError.js";
 
-export const register = async (req, res, next) => {
-  try {
-    const user = await registerUser(req.body);
+export const registerUser = async (data) => {
+  const { username, password, role, department } = data;
 
-    return res
-      .status(201)
-      .json(new ApiResponse(201, user, "User created successfully"));
-  } catch (error) {
-    next(error);
+  // 1️⃣ Check if user exists
+  const existingUser = await User.findOne({
+  username: username.toLowerCase(),
+});
+
+  if (existingUser) {
+    throw new ApiError(400, "User already exists");
   }
+
+  // 2️⃣ Create user
+  const user = await User.create({
+    username,
+    password,
+    role,
+    department: role === "admin" ? null : department,
+  });
+
+  // 3️⃣ Remove password
+  const createdUser = await User.findById(user._id).select("-password");
+
+  if (!createdUser) {
+    throw new ApiError(500, "Failed to create user");
+  }
+
+  return createdUser;
 };
