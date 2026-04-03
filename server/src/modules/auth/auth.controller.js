@@ -1,8 +1,8 @@
 import { User } from "../../models/user.model.js";
 import { ApiError } from "../../utils/apiError.js";
 
-export const registerUser = async (req, res) => {
-  const { username, password, role, department } = req.body;
+export const registerUser = async (data) => {
+  const { username, password, role, department } = data;
 
   // 1️⃣ Check if user already exists
   const existingUser = await User.findOne({ username });
