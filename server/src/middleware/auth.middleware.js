@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { verifyToken } from "../utils/jwt.js";
 
 export const protect = async (req, res, next) => {
   const token = req.cookies?.token;
