@@ -5,7 +5,7 @@ class RegisterDto extends BaseDto {
   static schema = Joi.object({
     username: Joi.string().trim().lowercase().min(2).max(50).required(),
 
-    password: Joi.string().min(6).max(128).required().messages({
+    password: Joi.string().min(8).max(128).required().messages({
       "string.min": "Password must contain at least 6 characters",
     }),
 
